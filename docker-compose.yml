@@ -1,0 +1,31 @@
+version: "2"
+services:
+  flask:
+    build: ./charts_backend
+    links:
+      - db
+      - react-app
+    ports:
+      - "5000:5000"
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "32000:3306"
+    environment:
+      MYSQL_USER: chartuser
+      MYSQL_PASSWORD: chartusermysql123
+      MYSQL_DATABASE: chart_demo
+      MYSQL_ROOT_PASSWORD: chartsmysql123
+
+  react-app:
+    build:
+      context: ./react-app
+      dockerfile: Dockerfile
+    volumes:
+      - './react-app:/react-app'
+      - '/react-app/node_modules'
+    ports:
+      - '3001:3000'
+    environment:
+      - NODE_ENV=development
